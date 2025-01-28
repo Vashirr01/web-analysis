@@ -1,1 +1,4 @@
 web-scraper/
+__pycache__/
+scraped_data.csv
+.env
