@@ -1,0 +1,70 @@
+package views
+
+templ base() {
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <title>Web Scraper Analysis</title>
+            <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="bg-gray-100">
+            <div class="container mx-auto px-4 py-8">
+                { children... }
+            </div>
+        </body>
+    </html>
+}
+
+templ index() {
+    @base() {
+        <div class="max-w-2xl mx-auto">
+            <h1 class="text-3xl font-bold mb-8">Website Analyzer</h1>
+            <form hx-post="/analyze" hx-target="#result" hx-indicator="#spinner" class="space-y-4">
+                <div>
+                    <label for="url" class="block text-sm font-medium text-gray-700">Website URL</label>
+                    <input
+                        type="url"
+                        name="url"
+                        id="url"
+                        required
+                        placeholder="https://example.com"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 text-white rounded-md px-4 py-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                    Analyze Website
+                </button>
+            </form>
+            <div id="spinner" class="htmx-indicator py-4 text-center hidden">
+                <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+            </div>
+            <div id="result" class="mt-8"></div>
+        </div>
+    }
+}
+
+templ result(summary string, scraped map[string]interface{}) {
+    <div class="space-y-6 bg-white shadow rounded-lg p-6">
+        <div>
+            <h2 class="text-xl font-semibold mb-2">AI Summary</h2>
+            <p class="text-gray-700">{ summary }</p>
+        </div>
+        <div>
+            <h2 class="text-xl font-semibold mb-2">Scraped Data</h2>
+            <div class="space-y-2">
+                for key, value := range scraped {
+                    <div>
+                        <span class="font-medium">{ key }:</span>
+                        <span class="text-gray-700">{ fmt.Sprint(value) }</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
