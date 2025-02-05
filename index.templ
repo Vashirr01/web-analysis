@@ -1,6 +1,9 @@
-package views
+package main
 
-templ base() {
+import(
+    "fmt"
+)
+templ Base() {
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -18,8 +21,8 @@ templ base() {
     </html>
 }
 
-templ index() {
-    @base() {
+templ Index() {
+    @Base() {
         <div class="max-w-2xl mx-auto">
             <h1 class="text-3xl font-bold mb-8">Website Analyzer</h1>
             <form hx-post="/analyze" hx-target="#result" hx-indicator="#spinner" class="space-y-4">
@@ -49,7 +52,7 @@ templ index() {
     }
 }
 
-templ result(summary string, scraped map[string]interface{}) {
+templ Result(summary string, scraped []map[string]interface{}) {
     <div class="space-y-6 bg-white shadow rounded-lg p-6">
         <div>
             <h2 class="text-xl font-semibold mb-2">AI Summary</h2>
@@ -58,11 +61,13 @@ templ result(summary string, scraped map[string]interface{}) {
         <div>
             <h2 class="text-xl font-semibold mb-2">Scraped Data</h2>
             <div class="space-y-2">
-                for key, value := range scraped {
-                    <div>
-                        <span class="font-medium">{ key }:</span>
-                        <span class="text-gray-700">{ fmt.Sprint(value) }</span>
-                    </div>
+                for _, item := range scraped {
+                    for key, value := range item {
+                        <div>
+                            <span class="font-medium">{ key }:</span>
+                            <span class="text-gray-700">{ fmt.Sprint(value) }</span>
+                        </div>
+                    }
                 }
             </div>
         </div>
