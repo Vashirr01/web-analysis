@@ -1,3 +1,4 @@
+#scraper.py
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -7,13 +8,6 @@ from urllib.parse import urljoin
 
 class WebScraper:
     def __init__(self, base_url, delay=1):
-        """
-        Initialize the scraper with a base URL and optional delay between requests
-        
-        Args:
-            base_url (str): The base URL to scrape
-            delay (int): Delay between requests in seconds
-        """
         self.base_url = base_url
         self.delay = delay
         self.session = requests.Session()
@@ -29,15 +23,6 @@ class WebScraper:
         self.logger = logging.getLogger(__name__)
 
     def fetch_page(self, url):
-        """
-        Fetch a page and return its BeautifulSoup object
-        
-        Args:
-            url (str): URL to fetch
-            
-        Returns:
-            BeautifulSoup: Parsed HTML content
-        """
         try:
             sleep(self.delay)  # Respect the site by waiting between requests
             response = self.session.get(url)
@@ -48,16 +33,6 @@ class WebScraper:
             return None
 
     def extract_data(self, soup, selectors):
-        """
-        Extract data from a BeautifulSoup object using CSS selectors
-        
-        Args:
-            soup (BeautifulSoup): Parsed HTML content
-            selectors (dict): Dictionary of name:selector pairs
-            
-        Returns:
-            dict: Extracted data
-        """
         data = {}
         for name, selector in selectors.items():
             try:
@@ -69,13 +44,6 @@ class WebScraper:
         return data
 
     def save_to_csv(self, data, filename):
-        """
-        Save extracted data to a CSV file
-        
-        Args:
-            data (list): List of dictionaries containing scraped data
-            filename (str): Output filename
-        """
         if not data:
             self.logger.warning("No data to save")
             return
@@ -90,16 +58,6 @@ class WebScraper:
             self.logger.error(f"Error saving to CSV: {str(e)}")
 
     def scrape_pages(self, urls, selectors):
-        """
-        Scrape multiple pages and extract data
-        
-        Args:
-            urls (list): List of URLs to scrape
-            selectors (dict): Dictionary of CSS selectors
-            
-        Returns:
-            list: List of dictionaries containing scraped data
-        """
         all_data = []
         for url in urls:
             full_url = urljoin(self.base_url, url)
